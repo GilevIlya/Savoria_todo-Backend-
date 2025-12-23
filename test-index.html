@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Send Access Token</title>
+</head>
+<body>
+<script>
+  // Твой access token
+  const accessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmODVkYzRhMy05NjExLTRmYzctOTZjNy0xOTlhMDE5NDIzMDMiLCJqdGkiOiIxODJmZTM4MC0wMzg0LTRiMTAtOGZmNC03MjAwYTQ2OGNhZmMiLCJ0eXBlIjoiYWNjZXNzIiwiZnJlc2giOmZhbHNlLCJjc3JmIjoiIiwiaWF0IjoxNzY1OTI2MzE0LCJleHAiOjE3NjU5MjcyMTQuNDExNjd9.yipLWebWkI3f8C86AWK7q_W5zRh8oHs-HhpQityLNmQ";
+
+  async function sendToken() {
+    try {
+      const response = await fetch("http://127.0.0.1:8000/users/user_data", {
+        method: "GET",
+        headers: {
+          "Authorization": `Bearer ${accessToken}`
+        }
+      });
+
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const data = await response.json();
+      console.log("Server response:", data);
+      alert(JSON.stringify(data));
+    } catch (err) {
+      console.error("Error:", err);
+      alert("Error: " + err.message);
+    }
+  }
+
+  // Отправляем сразу при загрузке страницы
+  sendToken();
+</script>
+</body>
+</html>

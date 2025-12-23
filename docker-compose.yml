@@ -1,0 +1,19 @@
+services:
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+  postgres:
+    image: postgres:17-alpine
+    container_name: savoria-db
+    env_file:
+      - ./src/utils/.env
+    ports:
+      - "5400:5432"
+    volumes:
+      - postgres_savoria:/var/lib/postgresql/data
+
+volumes:
+  postgres_savoria:
