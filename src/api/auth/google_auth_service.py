@@ -12,7 +12,7 @@ class GoogleOAuth():
         self.token_url = token_url
         self.auth_base_url = auth_form_base_url
 
-    def get_auth_url(self):
+    def get_auth_url(self) -> str:
         query_params = {
             'client_id': self.client_id,
             'redirect_uri': self.redirect_uri,
@@ -22,7 +22,7 @@ class GoogleOAuth():
         query_string = urllib.parse.urlencode(query_params, quote_via=urllib.parse.quote)
         return f"{self.auth_base_url}?{query_string}"
 
-    async def exchange_code_for_token(self, code: str):
+    async def exchange_code_for_token(self, code: str) -> str:
         async with aiohttp.ClientSession() as session:
             async with session.post(
                 url=self.token_url,
@@ -36,7 +36,7 @@ class GoogleOAuth():
             ) as response:
                 return await response.json()
 
-    async def parse_id_token(self, id_token: str):
+    async def parse_id_token(self, id_token: str) -> dict:
         payload = jwt.decode(
             id_token,
             algorithms="RS256",

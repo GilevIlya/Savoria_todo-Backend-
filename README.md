@@ -1,15 +1,29 @@
-Для запуска бекенда, склонировать проект https://github.com/BoarArtem/Savoria-Backend.git , убедитесь что директория в терминале верная, cd SavoriaBackend
+Savoria TODO Backend — a FastAPI-based REST API for managing user tasks with JWT authentication and Google OAuth support
+
+To run the backend, clone the project https://github.com/BoarArtem/Savoria-Backend.git, make sure the directory in the terminal is correct, and cd SavoriaBackend.
 
 
-
-Запустить Dockerengine и в терминале выполнить docker-compose up --build, дождаться стягивания всех зависимостей
-
+Launch Dockerengine and run docker-compose up --build in the terminal, wait until all dependencies are pulled in
 
 
-Базовый url Api http://localhost:8000, Документаци Api будет доступна по http://localhost:8000/docs
- 
+The base API URL is http://localhost:8000, API documentation will be available at http://localhost:8000/docs
 
 
-API для сайта, пока что реализована только регистрация пользователей. Проект написан на FastAPI, для валидации данных используется Pydantic, база данных — PostgreSQL, а для работы с ней через Python применяется SQLAlchemy. Пользователи могут зарегистрироваться, отправив POST-запрос с данными, такими как имя, фамилия, email, логин и пароль. На сервере данные валидируются через Pydantic, пароль хешируется перед сохранением, и проверяется, чтобы не было дублирующихся пользователей.
+## 🔹 Features
 
-Проект запущен через Uvicorn, всё асинхронное, так что при масштабировании проблем не должно быть. Сейчас это минимальный рабочий вариант, чтобы можно было тестировать регистрацию и понимать, как строится структура проекта с FastAPI и SQLAlchemy.
+- User registration and login
+- Google OAuth authentication
+- CRUD operations for tasks
+- JWT token management (access and refresh)
+- Structured architecture with services, repositories, and routers
+
+---
+
+## 🛠 Technologies
+
+- Python 3.13+
+- FastAPI
+- SQLAlchemy (async)
+- PostgreSQL
+- JWT (PyJWT)
+- Docker & Docker Compose
