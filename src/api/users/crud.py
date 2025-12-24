@@ -5,7 +5,7 @@ from src.utils.create_tables import UsersTable
 from uuid import UUID
 
 
-async def selecting_data_by_uuid(uuid: UUID, session: SessionDep):
+async def selecting_data_by_uuid(uuid: UUID, session: SessionDep) -> tuple:
     try:
         query = select(UsersTable.firstname,
                     UsersTable.lastname,
