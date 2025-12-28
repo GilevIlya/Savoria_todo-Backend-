@@ -1,7 +1,7 @@
 from fastapi import HTTPException
-from src.utils.database_engine import SessionDep
-from sqlalchemy import select
-from src.utils.create_tables import UsersTable
+from database_engine import SessionDep
+from sqlalchemy import select, update
+from database_tables import UsersTable
 from uuid import UUID
 
 
@@ -16,4 +16,15 @@ async def selecting_data_by_uuid(uuid: UUID, session: SessionDep) -> tuple:
             raise HTTPException(status_code=401, detail='Is not registered')
         return existing_user
     except:
-        raise HTTPException(status_code=401, detail='No such user by access token')
+        raise HTTPException(status_code=404, detail='No such user by access token')
+    
+
+async def update_user_data(user_uuid: str, session: SessionDep, new_creds: dict):
+    try:
+        stmt = update(UsersTable).where(UsersTable.id == user_uuid).values(**new_creds)
+
+        await session.execute(stmt)
+        await session.commit()
+
+    except:
+        raise HTTPException(status_code=404)

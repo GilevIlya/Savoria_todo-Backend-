@@ -9,7 +9,8 @@ class GoogleAuthConfig(BaseSettings):
     REDIRECT_URI: str
 
     model_config = SettingsConfigDict(
-        env_file=Path(__file__).parent / '.env'
+        env_file=Path(__file__).parent.parent.parent.parent / '.env',
+        extra='ignore'
     )
 
 google_auth_config = GoogleAuthConfig()

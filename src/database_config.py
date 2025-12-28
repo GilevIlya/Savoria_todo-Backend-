@@ -7,7 +7,8 @@ class DataBaseConfig(BaseSettings):
     POSTGRES_PASSWORD: str
 
     model_config = SettingsConfigDict(
-        env_file=Path(__file__).parent / '.env'
+        env_file=Path(__file__).parent.parent / '.env',
+        extra='ignore'
     )
 
     @property

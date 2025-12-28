@@ -1,9 +1,9 @@
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from src.api.auth.router import auth_router
-from src.utils.create_tables import create_user_table
-from src.api.users.router import users_router
+from api.auth.router import auth_router
+from database_engine import create_user_table
+from api.users.router import users_router
 
 app = FastAPI()
 app.include_router(auth_router)

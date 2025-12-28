@@ -1,10 +1,10 @@
 from fastapi import HTTPException
 from fastapi.concurrency import run_in_threadpool
-from src.utils.database_engine import SessionDep
+from database_engine import SessionDep
 from sqlalchemy import select, insert, exists
 from argon2 import PasswordHasher
-from src.api.auth.schemas import RegisterSchema, LoginSchema
-from src.utils.create_tables import UsersTable
+from api.auth.schemas import RegisterSchema, LoginSchema
+from database_tables import UsersTable
 from sqlalchemy.dialects.postgresql import insert as postgresql_insert
 
 async def register_user(payload: RegisterSchema, session: SessionDep, password_hasher: PasswordHasher):

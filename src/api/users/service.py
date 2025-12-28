@@ -1,9 +1,10 @@
-from fastapi import HTTPException
-from src.jwt.service import security
+from fastapi import HTTPException, Response
+from api.auth_jwt.service import security
 from authx.exceptions import JWTDecodeError
-from src.api.users.crud import selecting_data_by_uuid
+from api.users.crud import selecting_data_by_uuid
+from api.users.crud import update_user_data
 from authx.exceptions import JWTDecodeError
-from src.utils.database_engine import SessionDep
+from database_engine import SessionDep
 
 async def decoding_token(token) -> str:
     decoded_token = security._decode_token(token)
@@ -11,8 +12,7 @@ async def decoding_token(token) -> str:
     return token_uuid
 
 async def return_data_for_dashboard(session: SessionDep, authorization: str):
-    token = '' if not authorization else authorization.split(" ")[1]
-    user_uuid = await get_user_uuid(token)
+    user_uuid = await get_user_uuid(authorization)
     user = await selecting_data_by_uuid(uuid=user_uuid, session=session)
     result = {
         "user_data": {
@@ -23,9 +23,32 @@ async def return_data_for_dashboard(session: SessionDep, authorization: str):
     }
     return result
 
-async def get_user_uuid(token) -> str:
+async def get_user_uuid(auth_token) -> str:
     try:
+        token = '' if not auth_token else auth_token.split(" ")[1]
         user_uuid = await decoding_token(token)
         return user_uuid
     except JWTDecodeError:
         raise HTTPException(status_code=401, detail='Unauthorized, token is expired')
+    
+
+async def logout(response: Response) -> None:
+    try:
+        response.delete_cookie(
+            key='refresh_token',
+            path='/'
+        )
+        return {'status': 'logged_out'}
+    
+    except:
+        raise HTTPException(status_code=404)
+    
+async def update_user_credentials(access_token: str, session: SessionDep, new_creds: dict):
+    user_uuid = await get_user_uuid(auth_token=access_token)
+
+    if user_uuid['password']:
+        print('yep')
+    await update_user_data(
+            user_uuid=user_uuid,
+            session=session,
+            new_creds=new_creds)
