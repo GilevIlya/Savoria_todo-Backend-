@@ -1,7 +1,7 @@
 import aiohttp
 import jwt
 import urllib.parse
-from src.api.auth.config import google_auth_config
+from api.auth.config import google_auth_config
 
 class GoogleOAuth():
     

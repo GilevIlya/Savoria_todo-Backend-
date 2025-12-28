@@ -1,11 +1,11 @@
 from fastapi import APIRouter, Response, Depends, Request, Body
-from src.api.auth.schemas import RegisterSchema, LoginSchema
-from src.utils.database_engine import SessionDep
+from api.auth.schemas import RegisterSchema, LoginSchema
+from database_engine import SessionDep
 from argon2 import PasswordHasher
-from src.api.security_tools.passwordhasher import get_password_hasher
-from src.api.auth.google_auth_service import get_google_oauth, GoogleOAuth
-from src.api.auth.crud import register_user, authenticate_user, authenticate_google_user, check_if_uuid_exists
-from src.jwt.service import get_jwt_token_service_obj, JwtTokenService, get_uuid_from_cookie
+from api.security_tools.passwordhasher import get_password_hasher
+from api.auth.google_auth_service import get_google_oauth, GoogleOAuth
+from api.auth.crud import register_user, authenticate_user, authenticate_google_user, check_if_uuid_exists
+from api.auth_jwt.service import get_jwt_token_service_obj, JwtTokenService, get_uuid_from_cookie
 from typing import Annotated
 
 auth_router = APIRouter(prefix='/auth')

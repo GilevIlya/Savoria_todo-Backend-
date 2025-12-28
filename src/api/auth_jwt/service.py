@@ -1,7 +1,7 @@
 from authx import AuthX, AuthXConfig
 from fastapi import Response, Request, HTTPException
 from datetime import timedelta
-from src.jwt.config import jwt_auth_config
+from api.auth_jwt.config import jwt_auth_config
 from authx.exceptions import JWTDecodeError
 from uuid import UUID
 
@@ -9,7 +9,7 @@ from uuid import UUID
 config = AuthXConfig()
 config.JWT_SECRET_KEY = jwt_auth_config.JWT_SECRET_KEY
 config.JWT_ACCESS_COOKIE_NAME = "access_token"
-config.JWT_ACCESS_TOKEN_EXPIRES=timedelta(seconds=10)
+config.JWT_ACCESS_TOKEN_EXPIRES=timedelta(minutes=10)
 config.JWT_REFRESH_COOKIE_NAME = "refresh_token"
 config.JWT_TOKEN_LOCATION = ["headers"]
 config.JWT_COOKIE_SECURE = False
@@ -25,7 +25,7 @@ class JwtTokenService:
         self.config = authx_config
 
     async def create_tokens(self, user_uuid: UUID, response: Response, agree_status: bool):
-        jwt_access_token = self.config.create_access_token(uid=str(user_uuid), expiry=timedelta(seconds=10))
+        jwt_access_token = self.config.create_access_token(uid=str(user_uuid), expiry=timedelta(minutes=10))
         jwt_refresh_token = self.config.create_refresh_token(uid=str(user_uuid), expiry=timedelta(days=20))
 
         await self.create_cookie(jwt_refresh_token=jwt_refresh_token, 
@@ -37,7 +37,7 @@ class JwtTokenService:
             }
     
     async def generate_access_token(self, user_uuid: str) -> str:
-        jwt_access_token = self.config.create_access_token(uid=str(user_uuid), expiry=timedelta(seconds=10))
+        jwt_access_token = self.config.create_access_token(uid=str(user_uuid), expiry=timedelta(minutes=10))
         return jwt_access_token
 
 
