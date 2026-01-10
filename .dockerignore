@@ -1,0 +1,14 @@
+venv/
+.env
+
+.idea/
+
+__pycache__/
+
+.git/
+.gitignore
+
+test-index.html
+
+docker-compose.yml
+Dockerfile
