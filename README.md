@@ -1,35 +1,15 @@
-# Savoria Todo Backend
+Для запуска бекенда, склонировать проект https://github.com/BoarArtem/Savoria-Backend.git , убедитесь что директория в терминале верная, cd SavoriaBackend
 
-Backend API for Savoria Todo application built with FastAPI. Implements user registration, authentication, and task management.
 
-## Technologies
 
-FastAPI, Python, PostgreSQL, SQLAlchemy, Alembic, Pydantic, Uvicorn, Docker
+Запустить Dockerengine и в терминале выполнить docker-compose up --build, дождаться стягивания всех зависимостей
 
-## Getting Started
 
-Create a `.env` file with the required environment variables, then run:
 
-```bash
-docker-compose up --build
-```
+Базовый url Api http://localhost:8000, Документаци Api будет доступна по http://localhost:8000/docs
+ 
 
-## API Documentation
 
-After starting, documentation is available at http://localhost:8000/docs
+API для сайта, пока что реализована только регистрация пользователей. Проект написан на FastAPI, для валидации данных используется Pydantic, база данных — PostgreSQL, а для работы с ней через Python применяется SQLAlchemy. Пользователи могут зарегистрироваться, отправив POST-запрос с данными, такими как имя, фамилия, email, логин и пароль. На сервере данные валидируются через Pydantic, пароль хешируется перед сохранением, и проверяется, чтобы не было дублирующихся пользователей.
 
-## Structure
-
-- `src/` - application source code
-- `uploads/` - uploaded files  
-- `alembic/` - database migrations
-- `requirements.txt` - Python dependencies
-- `docker-compose.yml` - Docker configuration
-
-## Current Features
-
-User registration implemented with Pydantic data validation (first name, last name, email, username, password). Passwords are hashed before saving, duplicate checks included. Asynchronous project running on Uvicorn, built with FastAPI and SQLAlchemy for PostgreSQL interaction.
-
-## In Development
-
-JWT authorization, profile management, data editing, password reset, email confirmation, extended Todo functionality with categories and priorities.
+Проект запущен через Uvicorn, всё асинхронное, так что при масштабировании проблем не должно быть. В будущем планируется добавить авторизацию, работу с профилем, редактирование данных, сброс пароля и подтверждение email. Сейчас это минимальный рабочий вариант, чтобы можно было тестировать регистрацию и понимать, как строится структура проекта с FastAPI и SQLAlchemy.

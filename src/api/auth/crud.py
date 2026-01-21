@@ -52,7 +52,11 @@ async def authenticate_google_user(
         **user_data
     ).on_conflict_do_update(
         index_elements=[UsersTable.google_sub],
-        set_={"google_sub": postgresql_insert(UsersTable).excluded.google_sub}
+        set_={
+        "firstname": postgresql_insert(UsersTable).excluded.firstname,
+        "lastname": postgresql_insert(UsersTable).excluded.lastname,
+        "profile_pic": postgresql_insert(UsersTable).excluded.profile_pic
+    }
     ).returning(UsersTable.id)
 
     res = await session.execute(query)

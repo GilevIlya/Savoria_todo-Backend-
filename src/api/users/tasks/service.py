@@ -1,10 +1,10 @@
-from api.users.tasks.config import TASK_UPLOAD_DIR
-from typing import List
+from api.users.tasks.config import TASK_UPLOAD_DIR, TASK_IMG_URL
+from typing import List, Optional
 from db.models import TasksTable
 from fastapi import HTTPException
+from redis.asyncio import Redis
 
-TASK_IMG_URL = "http://localhost:8000/uploads/task_images/"
-
+import json
 import aiofiles
 
 async def set_task_pic(
@@ -28,8 +28,8 @@ async def serialize_tasks(
             "id": task.id,
             "title": task.title,
             "description": task.description,
-            "status": task.status,
-            "priority": task.priority,
+            "status": task.status.value ,
+            "priority": task.priority.value,
             "deadline": task.deadline,
             "task_img": TASK_IMG_URL+f"{task.id}_{user_uuid}.jpeg",
         }
@@ -41,3 +41,52 @@ async def exclude_unset(task_data) -> dict:
      return {
         key: value for key, value in dict(task_data).items() if value is not None
     }
+
+async def get_tasks(
+        redis: Redis,
+        user_uuid: str,
+) -> Optional[List[dict]]:
+    result = await redis.get(f"{user_uuid}_tasks")
+    return json.loads(result) if result else None
+
+async def get_vital_tasks_r(
+        redis: Redis,
+        user_uuid: str,
+) -> Optional[List[dict]]:
+    result = await redis.get(f"{user_uuid}_vital_tasks")
+    return json.loads(result) if result else None
+
+async def set_vital_tasks(
+        redis: Redis,
+        user_uuid: str,
+        vital_tasks: List[dict]
+):
+    await redis.set(f"{user_uuid}_vital_tasks", json.dumps(vital_tasks), ex=100)
+
+async def set_tasks(
+        redis: Redis,
+        user_uuid: str,
+        tasks_data: List[dict]
+):
+    await redis.set(f"{user_uuid}_tasks", json.dumps(tasks_data), ex=100)
+
+async def delete_tasks_r(
+        redis: Redis,
+        user_uuid: str
+):
+    await redis.delete(f"{user_uuid}_tasks")
+    await redis.delete(f"{user_uuid}_vital_tasks")
+
+async def serialize_TaskTable_obj_data(
+        task_obj: TasksTable
+):
+    return {
+                'id': task_obj.id,
+                'user_id': task_obj.user_id,
+                'title': task_obj.title,
+                'description': task_obj.description,
+                'priority': str(task_obj.priority.value),
+                'deadline': task_obj.deadline,
+                'created_at': task_obj.created_at,
+                'updated_at': task_obj.updated_at
+            }
