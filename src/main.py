@@ -1,5 +1,4 @@
 import uvicorn
-import time
 
 from fastapi import FastAPI
 from pathlib import Path
@@ -7,7 +6,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from fastapi.staticfiles import StaticFiles
 from api.auth.router import auth_router
-from db.engine import create_user_table
 from api.users.router import users_router
 from api.users.tasks.router import users_tasks_router
 from redis_utils.client import init_redis, close_redis
@@ -47,3 +45,5 @@ app.mount(
 
 if __name__ == "__main__":
     uvicorn.run("main:app", reload=True, host="0.0.0.0")
+
+# a

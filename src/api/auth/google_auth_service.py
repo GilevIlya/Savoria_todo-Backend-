@@ -47,6 +47,7 @@ class GoogleOAuth():
                 "firstname": payload.get("given_name", ""),
                 "lastname": payload.get("family_name", ""),
                 "google_sub": payload.get("sub", ""),
+                "profile_pic": payload.get("picture", "")
             }
 
     

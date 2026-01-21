@@ -54,6 +54,7 @@ async def handle_google_code(
     token_data = await google_oauth_obj.exchange_code_for_token(code=code)
     user_data = await google_oauth_obj.parse_id_token(id_token=token_data['id_token'])
 
+
     user_uuid = await authenticate_google_user(user_data=user_data, session=data_base_session)
     if user_uuid:
         tokens = await token_service.create_tokens(user_uuid=user_uuid, response=fastapi_response, agree_status=True)

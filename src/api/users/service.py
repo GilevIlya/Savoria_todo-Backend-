@@ -1,26 +1,18 @@
-from fastapi import HTTPException, Response
+from fastapi import HTTPException, Response, UploadFile
 from api.auth_jwt.service import security
-from api.users.crud import selecting_data_by_uuid
 from api.users.crud import update_user_data
-from authx.exceptions import JWTDecodeError
+from api.users.config import PROFILE_PHOTO_UPLOAD_DIR, PROFILE_PHOTO_URL
+
 from db.engine import SessionDep
+
+from authx.exceptions import JWTDecodeError
+
+import aiofiles
 
 async def decoding_token(token) -> str:
     decoded_token = security._decode_token(token)
     token_uuid = decoded_token.sub
     return token_uuid
-
-async def return_data_for_dashboard(session: SessionDep, authorization: str):
-    user_uuid = await get_user_uuid(authorization)
-    user = await selecting_data_by_uuid(uuid=user_uuid, session=session)
-    result = {
-        "user_data": {
-            "firstname": user[0],
-            "lastname": user[1],
-            "email": user[2],
-        }
-    }
-    return result
 
 async def get_user_uuid(auth_token) -> str:
     try:
@@ -49,3 +41,17 @@ async def update_user_credentials(access_token: str, session: SessionDep, new_cr
             user_uuid=user_uuid,
             session=session,
             new_creds=new_creds)
+
+async def set_prof_pic(
+        user_uuid: str,
+        profile_pic: UploadFile,
+) -> str:
+    filepath = (PROFILE_PHOTO_UPLOAD_DIR / f"{user_uuid}.jpeg")
+    try:
+        async with aiofiles.open(filepath, mode="wb") as f:
+            content = await profile_pic.read()
+            await f.write(content)
+        return str(PROFILE_PHOTO_URL + f"{user_uuid}.jpeg")
+    
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(f'{e}, picture installing error'))
