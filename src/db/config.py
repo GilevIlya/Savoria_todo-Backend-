@@ -1,5 +1,7 @@
 from pathlib import Path
+
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
 
 class DataBaseConfig(BaseSettings):
     POSTGRES_DB: str
@@ -7,8 +9,7 @@ class DataBaseConfig(BaseSettings):
     POSTGRES_PASSWORD: str
 
     model_config = SettingsConfigDict(
-        env_file=Path(__file__).parent.parent.parent / '.env',
-        extra='ignore'
+        env_file=Path(__file__).parent.parent.parent / ".env", extra="ignore"
     )
 
     @property

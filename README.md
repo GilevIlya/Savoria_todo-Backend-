@@ -38,4 +38,3 @@ REDIRECT_URI=<your_redirect_uri>
 
 3. Start with docker-compose:
 docker-compose up --build
-

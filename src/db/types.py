@@ -1,5 +1,7 @@
-from sqlalchemy.types import TypeDecorator, Date
 from datetime import datetime
+
+from sqlalchemy.types import Date, TypeDecorator
+
 
 class DDMMYYYY(TypeDecorator):
     impl = Date
